@@ -14,9 +14,17 @@ int main() {
 	return 0;
 }
 %}
+%union {
+	int integer;
+	unsigned char byte;
+	char* text;
+}
 %token START_FONT FONT SIZE FONT_BBX START_PROPERTIES END_PROPERTIES
 %token CHARS START_CHAR ENCODING SWIDTH DWIDTH BBX BITMAP END_CHAR END_FONT
-%token HEX VERSION INTEGER ESCAPED_TEXT XLFD TEXT
+%token VERSION ESCAPED_TEXT XLFD
+%token <integer> INTEGER
+%token <byte> HEX
+%token <text> TEXT
 %%
 bdf
 	: start_font
@@ -41,10 +49,16 @@ font
 
 size
 	: SIZE INTEGER INTEGER INTEGER
+	{
+		printf("size: %d %d %d\n", $2, $3, $4);
+	}
 	;
 
 font_bbx
 	: FONT_BBX INTEGER INTEGER INTEGER INTEGER
+	{
+		printf("font bbx: %d %d %d %d\n", $2, $3, $4, $5);
+	}
 	;
 
 start_properties
@@ -71,6 +85,9 @@ end_properties
 
 chars
 	: CHARS INTEGER
+	{
+		printf("chars: %d\n", $2);
+	}
 	;
 
 characters
@@ -91,24 +108,36 @@ character
 start_char
 	: START_CHAR TEXT
 	{
-		printf("start char is found.\n");
+		printf("--- start char %s ---\n", $2);
 	}
 	;
 
 encoding
 	: ENCODING INTEGER
+	{
+		printf("encoding: %d\n", $2);
+	}
 	;
 
 swidth
 	: SWIDTH INTEGER INTEGER
+	{
+		printf("swidth: %d %d\n", $2, $3);
+	}
 	;
 
 dwidth
 	: DWIDTH INTEGER INTEGER
+	{
+		printf("dwidth: %d %d\n", $2, $3);
+	}
 	;
 
 bbx
 	: BBX INTEGER INTEGER INTEGER INTEGER
+	{
+		printf("bbx: %d %d %d %d\n", $2, $3, $4, $5);
+	}
 	;
 
 bitmap

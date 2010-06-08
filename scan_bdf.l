@@ -17,15 +17,15 @@ DWIDTH				{ return DWIDTH; }
 BBX				{ return BBX; }
 BITMAP				{ BEGIN(bitmap); return BITMAP; }
 <bitmap>{
-[0-9a-fA-F]{2}			{ return HEX; }
+[0-9a-fA-F]{2}			{ yylval.byte = strtol(yytext, NULL, 16); return HEX; }
 ENDCHAR				{ BEGIN(INITIAL); return END_CHAR; }
 }
 ENDFONT				{ return END_FONT; }
 [0-9]+\.[0-9]+			{ return VERSION; }
--?[0-9]+			{ return INTEGER; }
+-?[0-9]+			{ yylval.integer = atoi(yytext); return INTEGER; }
 \"[^\"]*\"			{ return ESCAPED_TEXT; }
 [^ \t\r\n-]*(-[^ \t\r\n-]*){14}	{ return XLFD; }
-[^ \t\r\n]+			{ return TEXT; }
+[^ \t\r\n]+			{ yylval.text = yytext; return TEXT; }
 <*>COMMENT[^\r\n]*[\r\n]+
 <*>[ \t\r\n]
 %%
