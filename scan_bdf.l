@@ -1,30 +1,31 @@
 %{
-#include <stdio.h>
+#include "parse_bdf.h"
 %}
 %x bitmap
 %%
-STARTFONT			{ printf("start_font"); }
-FONT				{ printf("font"); }
-SIZE				{ printf("font_size"); }
-FONTBOUNDINGBOX			{ printf("font_boundingbox"); }
-STARTPROPERTIES			{ printf("start_properties"); }
-ENDPROPERTIES			{ printf("end_properties"); }
-CHARS				{ printf("char_num"); }
-STARTCHAR			{ printf("start_char"); }
-ENCODING			{ printf("encoding"); }
-SWIDTH				{ printf("swidth"); }
-DWIDTH				{ printf("dwidth"); }
-BBX				{ printf("bbx"); }
-BITMAP				{ printf("bitmap"); BEGIN(bitmap); }
+STARTFONT			{ return START_FONT; }
+FONT				{ return FONT; }
+SIZE				{ return SIZE; }
+FONTBOUNDINGBOX			{ return FONT_BBX; }
+STARTPROPERTIES			{ return START_PROPERTIES; }
+ENDPROPERTIES			{ return END_PROPERTIES; }
+CHARS				{ return CHARS; }
+STARTCHAR			{ return START_CHAR; }
+ENCODING			{ return ENCODING; }
+SWIDTH				{ return SWIDTH; }
+DWIDTH				{ return DWIDTH; }
+BBX				{ return BBX; }
+BITMAP				{ BEGIN(bitmap); return BITMAP; }
 <bitmap>{
-[0-9a-fA-F]{2}			{ printf("hex"); }
-ENDCHAR				{ printf("end_char"); BEGIN(INITIAL); }
+[0-9a-fA-F]{2}			{ return HEX; }
+ENDCHAR				{ BEGIN(INITIAL); return END_CHAR; }
 }
-ENDFONT				{ printf("end_font"); }
-[0-9]+\.[0-9]+			{ printf("version"); }
--?[0-9]+			{ printf("integer"); }
-\"[^\"]*\"			{ printf("escaped_text"); }
-[^ \t\r\n-]*(-[^ \t\r\n-]*){14}	{ printf("xlfd"); }
-[^ \t\r\n]+			{ printf("text"); }
-COMMENT[^\r\n]*[\r\n]+
+ENDFONT				{ return END_FONT; }
+[0-9]+\.[0-9]+			{ return VERSION; }
+-?[0-9]+			{ return INTEGER; }
+\"[^\"]*\"			{ return ESCAPED_TEXT; }
+[^ \t\r\n-]*(-[^ \t\r\n-]*){14}	{ return XLFD; }
+[^ \t\r\n]+			{ return TEXT; }
+<*>COMMENT[^\r\n]*[\r\n]+
+<*>[ \t\r\n]
 %%
