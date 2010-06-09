@@ -21,7 +21,6 @@ int BDFFont_parse(BDFFont* font) {
     int result;
     font_ptr = font;
     result = yyparse();
-    font_ptr = NULL;
     return result;
 }
 %}

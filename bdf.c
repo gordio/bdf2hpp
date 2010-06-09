@@ -14,5 +14,4 @@ void BDFFont_dtor(BDFFont* font) {
         free(glyph->bitmap);
     } 
     free(font->glyphs);
-    font->glyphs = NULL;
 }
