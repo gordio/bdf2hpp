@@ -17,24 +17,24 @@ int main(int argc, char* argv[]) {
 		unsigned char mask = 0x01;
 		for(i = 0; i < font.number_of_glyphs; ++i) {
 			BDFGlyph* glyph = font.glyphs + i;
-			printf("\t# %i %d \"%c\"\n", i, glyph->encoding, glyph->encoding);
+			printf("\t/* %02i %02d '%c' */\n", i, glyph->encoding, glyph->encoding);
 			/*printf("--- encoding: %d ---\n", glyph->encoding);*/
 			/*printf("dwidth: %d %d\n", glyph->dwidth[0], glyph->dwidth[1]);*/
 			/*printf("bbx: %d %d %d %d\n",*/
 					/*glyph->bbx[0], glyph->bbx[1], glyph->bbx[2], glyph->bbx[3]);*/
 			for(y = 0; y < glyph->bbx[1]; ++y) {
-				for(x = 0; x < glyph->pitch; ++x) {
+				for (x = 0; x < glyph->pitch; ++x) {
 					int index = glyph->pitch * y + x;
 					printf("\t0x%02X,", *(glyph->bitmap + index));
 					printf(" /* ");
-					for(bit = 7;bit >= 0;bit--) {
+					for (bit = 7;bit >= 0;bit--) {
 						if ((mask << bit) & (unsigned char)*(glyph->bitmap + index)) {
 							printf("1");
 						} else {
 							printf("0");
 						}
 					}
-					printf(" */ ");
+					printf(" */");
 					printf(" /* ");
 					for(bit = 7;bit >= 0;bit--) {
 						if ((mask << bit) & (unsigned char)*(glyph->bitmap + index)) {
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 							printf(" ");
 						}
 					}
-					printf(" */ ");
+					printf(" */");
 				}
 				printf("\n");
 			}
