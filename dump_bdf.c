@@ -38,9 +38,9 @@ int main(int argc, char* argv[]) {
 					printf(" /* ");
 					for(bit = 7;bit >= 0;bit--) {
 						if ((mask << bit) & (unsigned char)*(glyph->bitmap + index)) {
-							printf("██");
+							printf("#");
 						} else {
-							printf("  ");
+							printf(" ");
 						}
 					}
 					printf(" */ ");
